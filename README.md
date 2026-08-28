@@ -42,33 +42,5 @@ The application combines a simple, responsive interface with AI-powered assistan
 - *CSS3*
 - *JavaScript*
 
----
 
-## 📂 Project Structure
 
-```text
-Ayurva-Health-Assistant/
-│
-├── public/
-│   ├── ayurva_logo.jpg
-│   ├── robots.txt
-│   ├── seo.json
-│   └── sitemap.xml
-│
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── data/
-│   ├── utils/
-│   ├── App.tsx
-│   ├── index.css
-│   ├── main.tsx
-│   ├── seo.ts
-│   └── types.ts
-│
-├── .env.example
-├── .gitignore
-├── index.html
-├── package.json
-├── package-lock.json
-└── server.ts
