@@ -1,0 +1,6 @@
+{
+  "name": "Ayuva Health Assistant",
+  "description": "Comprehensive Ayuva Health Assistant providing metabolic analysis, BMR & TDEE calculation, caloric targets, macro breakdowns, 3D bio-digital anatomy, and Coach Ayuva gym workout routines.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

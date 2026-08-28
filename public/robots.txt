@@ -1,0 +1,17 @@
+# Robots.txt for Ayuva Health Assistant
+User-agent: *
+Allow: /
+Allow: /seo.json
+Allow: /sitemap.xml
+
+# Specific search engine bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Mobile
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+Sitemap: https://ayuvafit.vercel.app/sitemap.xml
