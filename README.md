@@ -1,20 +1,74 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# 🌿 Ayurva Health Assistant
 
-# Run and deploy your AI Studio app
+> Your intelligent health companion for accessible, user-friendly health assistance.
 
-This contains everything you need to run your app locally.
+## 🩺 About Ayurva Health Assistant
 
-View your app in AI Studio: https://ai.studio/apps/88382551-83e0-4517-879c-375e3a7f25a7
+*Ayurva Health Assistant* is an AI-powered web application designed to provide users with an intuitive platform for health-related assistance and information.
 
-## Run Locally
+The application combines a simple, responsive interface with AI-powered assistance to help users explore health-related questions and information in an easy-to-understand way.
 
-**Prerequisites:**  Node.js
+---
 
+## ✨ Features
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- 🤖 *AI Health Assistant*  
+  Interact with an AI-powered assistant for health-related questions.
+
+- 💬 *Interactive Chat Interface*  
+  Ask questions and receive conversational responses through a simple interface.
+
+- 🩺 *Health Information Assistance*  
+  Explore general health-related information in an accessible format.
+
+- 📱 *Responsive Design*  
+  Designed to work across desktops, tablets, and mobile devices.
+
+- 🌿 *Clean & User-Friendly Interface*  
+  Simple navigation designed to make the application easy to use.
+
+- ⚡ *Fast Web Application*  
+  Built with modern web technologies for a smooth user experience.
+
+---
+
+## 🛠️ Technologies Used
+
+- *React*
+- *TypeScript*
+- *Vite*
+- *Node.js*
+- *HTML5*
+- *CSS3*
+- *JavaScript*
+
+---
+
+## 📂 Project Structure
+
+```text
+Ayurva-Health-Assistant/
+│
+├── public/
+│   ├── ayurva_logo.jpg
+│   ├── robots.txt
+│   ├── seo.json
+│   └── sitemap.xml
+│
+├── src/
+│   ├── assets/
+│   ├── components/
+│   ├── data/
+│   ├── utils/
+│   ├── App.tsx
+│   ├── index.css
+│   ├── main.tsx
+│   ├── seo.ts
+│   └── types.ts
+│
+├── .env.example
+├── .gitignore
+├── index.html
+├── package.json
+├── package-lock.json
+└── server.ts
