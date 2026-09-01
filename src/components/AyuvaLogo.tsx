@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import ayuvaLogoImg from '../assets/ayuva_logo.jpg';
-import { Activity } from 'lucide-react';
 
 interface AyuvaLogoProps {
   className?: string;
@@ -13,18 +11,6 @@ export const AyuvaLogo: React.FC<AyuvaLogoProps> = ({
   size = 'md',
   showBorder = true,
 }) => {
-  // Bundled asset first, falls back to public path, then fallback icon
-  const [imgSrc, setImgSrc] = useState<string>(ayuvaLogoImg || '/ayuva_logo.jpg');
-  const [imgFailed, setImgFailed] = useState<boolean>(false);
-
-  const handleImageError = () => {
-    if (imgSrc !== '/ayuva_logo.jpg') {
-      setImgSrc('/ayuva_logo.jpg');
-    } else {
-      setImgFailed(true);
-    }
-  };
-
   const sizeClasses = {
     sm: 'w-7 h-7 sm:w-8 sm:h-8',
     md: 'w-10 h-10 sm:w-11 sm:h-11',
@@ -32,33 +18,62 @@ export const AyuvaLogo: React.FC<AyuvaLogoProps> = ({
     xl: 'w-16 h-16 sm:w-20 sm:h-20',
   };
 
-  const iconSizes = {
-    sm: 'w-4 h-4',
-    md: 'w-6 h-6',
-    lg: 'w-8 h-8',
-    xl: 'w-10 h-10',
-  };
-
   return (
     <div
-      className={`relative rounded-xl bg-black flex items-center justify-center overflow-hidden shrink-0 select-none ${
-        showBorder ? 'border border-cyan-400/50 shadow-lg shadow-cyan-500/25' : ''
+      className={`relative rounded-xl bg-[#020612] flex items-center justify-center overflow-hidden shrink-0 select-none ${
+        showBorder ? 'border border-cyan-400/50 shadow-lg shadow-cyan-500/25 ring-1 ring-cyan-500/20' : ''
       } ${sizeClasses[size]} ${className}`}
     >
-      {!imgFailed ? (
-        <img
-          src={imgSrc}
-          alt="Ayuva Health Assistant Logo"
-          className="w-full h-full object-contain p-0.5 rounded-lg"
-          onError={handleImageError}
-          loading="eager"
-          decoding="async"
+      {/* 100% Self-Contained Medical Vector Ayuva Emblem (Zero Network Dependency) */}
+      <svg
+        viewBox="0 0 100 100"
+        className="w-full h-full p-1"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <linearGradient id="ayuvaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#22D3EE" />
+            <stop offset="50%" stopColor="#06B6D4" />
+            <stop offset="100%" stopColor="#0284C7" />
+          </linearGradient>
+          <linearGradient id="glowHex" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#083344" />
+            <stop offset="100%" stopColor="#041527" />
+          </linearGradient>
+        </defs>
+
+        {/* Outer Orbit Ring */}
+        <circle cx="50" cy="50" r="46" fill="#040A18" stroke="#06B6D4" strokeWidth="2" strokeDasharray="6 3" opacity="0.8" />
+        
+        {/* Central Shield Hexagon */}
+        <path
+          d="M50 14L80 31V69L50 86L20 69V31L50 14Z"
+          fill="url(#glowHex)"
+          stroke="url(#ayuvaGrad)"
+          strokeWidth="2.5"
+          strokeLinejoin="round"
         />
-      ) : (
-        <div className="w-full h-full bg-gradient-to-br from-cyan-950 via-slate-900 to-black flex items-center justify-center text-cyan-400 p-1">
-          <Activity className={`${iconSizes[size]} animate-pulse`} />
-        </div>
-      )}
+
+        {/* Inner Accent Facet */}
+        <path
+          d="M50 24L72 36V64L50 76L28 64V36L50 24Z"
+          fill="#0E7490"
+          opacity="0.35"
+        />
+
+        {/* Medical ECG Pulse Wave */}
+        <path
+          d="M26 50H38L44 34L52 66L58 44L63 50H74"
+          stroke="#38BDF8"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+
+        {/* Core Quantum Spark */}
+        <circle cx="50" cy="50" r="3" fill="#A5F3FC" />
+      </svg>
     </div>
   );
 };
