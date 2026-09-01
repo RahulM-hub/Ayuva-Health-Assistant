@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import { UserProfile, CalculationResults } from '../types';
+import { AyuvaLogo } from './AyuvaLogo';
 import { 
   Sparkles, 
   X, 
   Send, 
-  Bot, 
   User, 
   Trash2,
   Copy, 
@@ -15,8 +15,7 @@ import {
   Utensils, 
   Zap, 
   ShieldCheck,
-  Lock,
-  RefreshCw
+  Lock
 } from 'lucide-react';
 import { generateAccurateCoachResponse } from '../utils/aiCoachEngine';
 
@@ -25,6 +24,7 @@ interface AICoachModalProps {
   onClose: () => void;
   profile: UserProfile;
   results: CalculationResults;
+  selectedMuscle?: string | null;
 }
 
 interface Message {
@@ -76,11 +76,13 @@ export const AICoachModal: React.FC<AICoachModalProps> = ({
   onClose,
   profile,
   results,
+  selectedMuscle,
 }) => {
   const [inputMessage, setInputMessage] = useState('');
   const [activeCategory, setActiveCategory] = useState(0);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [clearStatusMessage, setClearStatusMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const initialGreeting: Message = {
@@ -97,50 +99,57 @@ Ask me any specific question about **bicep/tricep/chest routines**, **breaking p
   };
 
   const [messages, setMessages] = useState<Message[]>([initialGreeting]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   useEffect(() => {
     if (isOpen) {
-      scrollToBottom();
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
     }
-  }, [messages, isOpen, isLoading]);
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isLoading]);
 
   if (!isOpen) return null;
 
-  const handleSendMessage = async (textToSend?: string) => {
-    const message = (textToSend || inputMessage).trim();
-    if (!message || isLoading) return;
+  const handleSendMessage = async (customText?: string) => {
+    const textToSend = customText || inputMessage;
+    if (!textToSend.trim() || isLoading) return;
 
-    const newMessages: Message[] = [...messages, { role: 'user', content: message }];
+    const userMessage: Message = { role: 'user', content: textToSend };
+    const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     setInputMessage('');
     setIsLoading(true);
-    setClearStatusMessage(null);
 
     const payloadProfile = {
-      gender: profile.gender,
-      age: profile.age,
-      heightCm: profile.heightCm,
-      weightKg: profile.weightKg,
-      activityLevel: profile.activityLevel,
-      bmr: results.bmr,
-      tdee: results.tdee,
-      goal: results.targetGoalLabel,
+      ...profile,
+      calculatedBMR: results.bmr,
+      calculatedTDEE: results.tdee,
       targetCalories: results.targetCalories,
+      targetGoalLabel: results.targetGoalLabel,
+      proteinMin: results.proteinRecommendationGrams.min,
+      proteinMax: results.proteinRecommendationGrams.max,
+      carbs: results.macros.maintenance.carbsGrams,
+      fats: results.macros.maintenance.fatsGrams,
+      bmi: results.bmi,
+      bmiCategory: results.bmiCategory,
+      selectedMuscle: selectedMuscle || undefined,
     };
 
     try {
-      const response = await fetch('/api/gemini/coach', {
+      const response = await fetch('/api/coach', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message,
+          message: textToSend,
           profile: payloadProfile,
-          history: newMessages.slice(1, -1),
+          conversationHistory: newMessages,
         }),
       });
 
@@ -152,12 +161,12 @@ Ask me any specific question about **bicep/tricep/chest routines**, **breaking p
       if (data && data.response) {
         setMessages([...newMessages, { role: 'assistant', content: data.response }]);
       } else {
-        const fallbackText = generateAccurateCoachResponse(message, payloadProfile, newMessages);
+        const fallbackText = generateAccurateCoachResponse(textToSend, payloadProfile, newMessages);
         setMessages([...newMessages, { role: 'assistant', content: fallbackText }]);
       }
     } catch (err: any) {
       console.warn('Network coach call failed, generating accurate local answer:', err);
-      const accurateFallback = generateAccurateCoachResponse(message, payloadProfile, newMessages);
+      const accurateFallback = generateAccurateCoachResponse(textToSend, payloadProfile, newMessages);
       setMessages([
         ...newMessages,
         {
@@ -177,7 +186,6 @@ Ask me any specific question about **bicep/tricep/chest routines**, **breaking p
   };
 
   const handleClearHistory = () => {
-    // Completely wipe conversation log and all client questions for privacy & safety
     setMessages([initialGreeting]);
     setInputMessage('');
     setClearStatusMessage('🔒 Privacy Protected: All client questions and conversation history have been permanently cleared.');
@@ -192,16 +200,9 @@ Ask me any specific question about **bicep/tricep/chest routines**, **breaking p
         
         {/* Modal Header */}
         <div className="p-3.5 sm:p-4 bg-gradient-to-r from-cyan-950 via-slate-900 to-blue-950 border-b border-cyan-500/30 flex items-center justify-between gap-3">
-          {/* Left: Branding & Agent Details */}
+          {/* Left: Ayuva Logo & Agent Details */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-black border border-cyan-400/40 p-0.5 flex items-center justify-center shadow-md shadow-cyan-500/20 overflow-hidden">
-              <img 
-                src="/ayuva_logo.jpg" 
-                alt="Coach Ayuva Avatar" 
-                className="w-full h-full object-contain rounded-lg"
-                referrerPolicy="no-referrer"
-              />
-            </div>
+            <AyuvaLogo size="md" />
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-sm sm:text-base font-bold text-white font-display">
@@ -224,9 +225,8 @@ Ask me any specific question about **bicep/tricep/chest routines**, **breaking p
             </div>
           </div>
 
-          {/* Right Side: Clear History Button & Close Button */}
+          {/* Right Side: Clear History & Close Button */}
           <div className="flex items-center gap-2 shrink-0">
-            {/* Labeled Clear History Button */}
             <button
               type="button"
               id="clear-history-button"
@@ -238,7 +238,6 @@ Ask me any specific question about **bicep/tricep/chest routines**, **breaking p
               <span>Clear History</span>
             </button>
 
-            {/* Close Button */}
             <button
               type="button"
               id="close-coach-ayuva-button"
@@ -251,7 +250,7 @@ Ask me any specific question about **bicep/tricep/chest routines**, **breaking p
           </div>
         </div>
 
-        {/* Client Privacy & Safety Notice Banner */}
+        {/* Client Privacy Notice Banner */}
         <div className="bg-[#050c1b] border-b border-cyan-950 px-4 py-1.5 flex items-center justify-between text-[11px] font-mono text-slate-400">
           <div className="flex items-center gap-1.5 text-emerald-400/90">
             <Lock className="w-3.5 h-3.5 text-emerald-400" />
@@ -277,15 +276,14 @@ Ask me any specific question about **bicep/tricep/chest routines**, **breaking p
                 key={index}
                 className={`flex items-start gap-3 ${isUser ? 'flex-row-reverse' : ''}`}
               >
-                <div
-                  className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 shadow-sm ${
-                    isUser
-                      ? 'bg-blue-600 text-white shadow-blue-500/20'
-                      : 'bg-cyan-500/20 border border-cyan-400/40 text-cyan-400 shadow-cyan-500/20'
-                  }`}
-                >
-                  {isUser ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
-                </div>
+                {isUser ? (
+                  <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-blue-500/20">
+                    <User className="w-4 h-4" />
+                  </div>
+                ) : (
+                  /* Ayuva Logo Icon for Coach Response */
+                  <AyuvaLogo size="sm" showBorder={true} className="w-8 h-8 shrink-0" />
+                )}
 
                 <div className="relative group max-w-[90%] sm:max-w-[84%]">
                   <div
@@ -339,16 +337,10 @@ Ask me any specific question about **bicep/tricep/chest routines**, **breaking p
             );
           })}
 
+          {/* Ayuva Logo Icon for Loading State */}
           {isLoading && (
             <div className="flex items-start gap-3 animate-in fade-in">
-              <div className="w-8 h-8 rounded-lg bg-black border border-cyan-400/40 p-0.5 flex items-center justify-center shadow-md shadow-cyan-500/20 overflow-hidden">
-                <img 
-                  src="/ayuva_logo.jpg" 
-                  alt="Coach Ayuva" 
-                  className="w-full h-full object-contain rounded"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
+              <AyuvaLogo size="sm" showBorder={true} className="w-8 h-8 shrink-0" />
               <div className="p-3.5 rounded-2xl bg-slate-900 border border-cyan-900/60 text-xs text-cyan-300 flex items-center gap-2.5 shadow-md">
                 <Sparkles className="w-4 h-4 animate-spin text-cyan-400" />
                 <span className="font-mono">Coach Ayuva is computing accurate sports science analysis...</span>
@@ -426,5 +418,3 @@ Ask me any specific question about **bicep/tricep/chest routines**, **breaking p
     </div>
   );
 };
-
-
