@@ -7,6 +7,7 @@ import { ResultsDashboard } from './components/ResultsDashboard';
 import { GymWorkoutsSection } from './components/GymWorkoutsSection';
 import { DietGuideSection } from './components/DietGuideSection';
 import { AICoachModal } from './components/AICoachModal';
+import { AyuvaLogo } from './components/AyuvaLogo';
 import { 
   Calculator, 
   Dumbbell, 
@@ -33,6 +34,47 @@ const DEFAULT_PROFILE: UserProfile = {
 };
 
 export default function App() {
+  // Inside App component:
+<header className="sticky top-0 z-40 border-b border-cyan-900/50 bg-[#040814]/95 backdrop-blur-xl">
+  <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
+    {/* Mobile-Safe Logo */}
+    <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+      <AyuvaLogo size="md" className="group-hover:scale-105 transition-transform" />
+      <div className="min-w-0">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <span className="text-sm sm:text-lg font-black tracking-tight text-white font-display truncate">
+            AYUVA HEALTH
+          </span>
+          <span className="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-mono bg-cyan-950 border border-cyan-500/40 text-cyan-300 shrink-0">
+            AI COACH PRO
+          </span>
+        </div>
+        <p className="text-[10px] sm:text-[11px] text-slate-400 hidden sm:block truncate">
+          Basal Metabolic Rate, Maintenance TDEE, Caloric Targets &amp; 3D Training
+        </p>
+      </div>
+    </div>
+
+    {/* Desktop Navigation */}
+    <nav className="hidden md:flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800">
+      <button onClick={() => setActiveTab('calculator')} className="...">Calculator &amp; Bio-Scan</button>
+      <button onClick={() => setActiveTab('workouts')} className="...">Gym Workouts</button>
+      <button onClick={() => setActiveTab('diet')} className="...">Diet Blueprint</button>
+    </nav>
+
+    {/* Coach Ayuva Button */}
+    <button onClick={() => setIsCoachOpen(true)} className="...">COACH AYUVA</button>
+  </div>
+
+  {/* Mobile Sub-Navigation Bar */}
+  <div className="md:hidden border-t border-cyan-950/60 bg-slate-950/90 px-2 py-1.5 flex items-center justify-around gap-1">
+    <button onClick={() => setActiveTab('calculator')} className="...">Calculator</button>
+    <button onClick={() => setActiveTab('workouts')} className="...">Workouts</button>
+    <button onClick={() => setActiveTab('diet')} className="...">Diet Plan</button>
+  </div>
+</header>
+
+  
   const [profile, setProfile] = useState<UserProfile>(() => {
     const saved = localStorage.getItem('bmr_user_profile');
     if (saved) {
@@ -323,6 +365,25 @@ export default function App() {
         profile={profile}
         results={results}
       />
+      {/* Mobile Fixed Bottom Quick Navigation Bar */}
+<nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#04091a]/95 backdrop-blur-xl border-t border-cyan-500/30 px-3 py-2 flex items-center justify-around shadow-2xl safe-area-pb">
+  <button onClick={() => { setActiveTab('calculator'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="...">
+    <Calculator className="w-5 h-5" />
+    <span className="text-[10px] font-mono">Calculator</span>
+  </button>
+  <button onClick={() => { setActiveTab('workouts'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="...">
+    <Dumbbell className="w-5 h-5" />
+    <span className="text-[10px] font-mono">Workouts</span>
+  </button>
+  <button onClick={() => { setActiveTab('diet'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="...">
+    <Utensils className="w-5 h-5" />
+    <span className="text-[10px] font-mono">Diet Plan</span>
+  </button>
+  <button onClick={() => setIsCoachOpen(true)} className="...">
+    <Bot className="w-4 h-4" />
+    <span className="text-[10px] font-mono font-bold">AI Coach</span>
+  </button>
+</nav>
     </div>
   );
 }
