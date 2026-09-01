@@ -381,7 +381,7 @@ export const BodyHologram3D: React.FC<BodyHologram3DProps> = ({
   }, [autoRotate, wireframeMode]);
 
   return (
-    <div className="relative w-full h-[520px] lg:h-[600px] rounded-2xl overflow-hidden bg-gradient-to-b from-[#060e20] via-[#040a18] to-[#02050c] border border-cyan-500/20 shadow-2xl glow-cyan flex flex-col items-center justify-center p-4">
+    <div className="relative w-full h-[400px] sm:h-[480px] lg:h-[580px] rounded-2xl overflow-hidden bg-gradient-to-b from-[#060e20] via-[#040a18] to-[#02050c] border border-cyan-500/20 shadow-2xl glow-cyan flex flex-col items-center justify-center p-3 sm:p-4 touch-pan-y">
       {/* Background Bio-Grid & Scanning Ambience */}
       <div className="absolute inset-0 holo-grid opacity-30 pointer-events-none" />
       <div className="absolute inset-0 scanline-bg opacity-40 pointer-events-none" />
