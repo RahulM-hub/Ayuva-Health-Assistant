@@ -18,7 +18,8 @@ import {
   Flame, 
   ShieldCheck,
   ChevronDown,
-  Layers
+  Layers,
+  MessageSquare
 } from 'lucide-react';
 
 const DEFAULT_PROFILE: UserProfile = {
@@ -34,47 +35,6 @@ const DEFAULT_PROFILE: UserProfile = {
 };
 
 export default function App() {
-  // Inside App component:
-<header className="sticky top-0 z-40 border-b border-cyan-900/50 bg-[#040814]/95 backdrop-blur-xl">
-  <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
-    {/* Mobile-Safe Logo */}
-    <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-      <AyuvaLogo size="md" className="group-hover:scale-105 transition-transform" />
-      <div className="min-w-0">
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          <span className="text-sm sm:text-lg font-black tracking-tight text-white font-display truncate">
-            AYUVA HEALTH
-          </span>
-          <span className="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-mono bg-cyan-950 border border-cyan-500/40 text-cyan-300 shrink-0">
-            AI COACH PRO
-          </span>
-        </div>
-        <p className="text-[10px] sm:text-[11px] text-slate-400 hidden sm:block truncate">
-          Basal Metabolic Rate, Maintenance TDEE, Caloric Targets &amp; 3D Training
-        </p>
-      </div>
-    </div>
-
-    {/* Desktop Navigation */}
-    <nav className="hidden md:flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800">
-      <button onClick={() => setActiveTab('calculator')} className="...">Calculator &amp; Bio-Scan</button>
-      <button onClick={() => setActiveTab('workouts')} className="...">Gym Workouts</button>
-      <button onClick={() => setActiveTab('diet')} className="...">Diet Blueprint</button>
-    </nav>
-
-    {/* Coach Ayuva Button */}
-    <button onClick={() => setIsCoachOpen(true)} className="...">COACH AYUVA</button>
-  </div>
-
-  {/* Mobile Sub-Navigation Bar */}
-  <div className="md:hidden border-t border-cyan-950/60 bg-slate-950/90 px-2 py-1.5 flex items-center justify-around gap-1">
-    <button onClick={() => setActiveTab('calculator')} className="...">Calculator</button>
-    <button onClick={() => setActiveTab('workouts')} className="...">Workouts</button>
-    <button onClick={() => setActiveTab('diet')} className="...">Diet Plan</button>
-  </div>
-</header>
-
-  
   const [profile, setProfile] = useState<UserProfile>(() => {
     const saved = localStorage.getItem('bmr_user_profile');
     if (saved) {
@@ -138,164 +98,144 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#040814] text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-black">
-      {/* Top Cybernetic Nav Header */}
-      <header className="sticky top-0 z-40 border-b border-cyan-900/50 bg-[#040814]/90 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          {/* Logo & Branding */}
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-black border border-cyan-400/40 p-1 flex items-center justify-center shadow-lg shadow-cyan-500/25 overflow-hidden group">
-              <img 
-                src="/ayuva_logo.jpg" 
-                alt="Ayuva Health Assistant Logo" 
-                className="w-full h-full object-contain rounded-lg group-hover:scale-105 transition-transform"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-base sm:text-lg font-black tracking-tight text-white font-display">AYUVA HEALTH ASSISTANT</span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-950 border border-cyan-500/40 text-cyan-300">
+    <div className="min-h-screen bg-[#020612] text-slate-100 flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
+      {/* 1. Header Section */}
+      <header className="sticky top-0 z-40 border-b border-cyan-900/50 bg-[#040814]/95 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2">
+          {/* Logo & Brand */}
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <AyuvaLogo size="md" className="hover:scale-105 transition-transform" />
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="text-sm sm:text-lg font-black tracking-tight text-white font-display truncate">
+                  AYUVA HEALTH
+                </span>
+                <span className="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-mono bg-cyan-950 border border-cyan-500/40 text-cyan-300 shrink-0">
                   AI COACH PRO
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 hidden sm:block">Basal Metabolic Rate, Maintenance TDEE, Caloric Targets &amp; 3D Training</p>
+              <p className="text-[10px] sm:text-[11px] text-slate-400 hidden sm:block truncate">
+                Basal Metabolic Rate, Maintenance TDEE, Caloric Targets &amp; 3D Training
+              </p>
             </div>
           </div>
 
-          {/* Navigation Pill Tabs */}
-          <nav className="flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800">
+          {/* Desktop Navigation Tabs */}
+          <nav className="hidden md:flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800">
             <button
-              type="button"
               onClick={() => setActiveTab('calculator')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
                 activeTab === 'calculator'
-                  ? 'bg-cyan-500 text-black shadow-md shadow-cyan-500/20'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/25'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-900'
               }`}
             >
               <Calculator className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Calculator & Bio-Scan</span>
-              <span className="md:hidden">BMR</span>
+              Calculator &amp; Bio-Scan
             </button>
-
             <button
-              type="button"
               onClick={() => setActiveTab('workouts')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
                 activeTab === 'workouts'
-                  ? 'bg-cyan-500 text-black shadow-md shadow-cyan-500/20'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/25'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-900'
               }`}
             >
               <Dumbbell className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Gym Workouts</span>
-              <span className="md:hidden">Gym</span>
+              Gym Workouts
             </button>
-
             <button
-              type="button"
               onClick={() => setActiveTab('diet')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
                 activeTab === 'diet'
-                  ? 'bg-cyan-500 text-black shadow-md shadow-cyan-500/20'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/25'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-900'
               }`}
             >
               <Utensils className="w-3.5 h-3.5" />
-              <span className="hidden md:inline">Diet Blueprint</span>
-              <span className="md:hidden">Diet</span>
+              Diet Blueprint
             </button>
           </nav>
 
-          {/* AI Coach Ayuva Action Button */}
+          {/* AI Coach Action Button */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsCoachOpen(true)}
+              className="relative group px-3 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white text-xs sm:text-sm font-bold shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-1.5 border border-cyan-300/30"
+            >
+              <Bot className="w-4 h-4 text-cyan-200 animate-bounce" />
+              <span className="hidden sm:inline">CONSULT COACH AYUVA</span>
+              <span className="sm:hidden">COACH</span>
+              <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400"></span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile View Sub-Bar */}
+        <div className="md:hidden border-t border-cyan-950/60 bg-slate-950/90 px-2 py-1.5 flex items-center justify-around gap-1">
           <button
-            type="button"
-            id="top-coach-ayuva-btn"
-            onClick={() => setIsCoachOpen(true)}
-            className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-black text-xs font-mono transition-all flex items-center gap-2 shadow-lg shadow-cyan-500/25 active:scale-95 border border-cyan-300/40 cursor-pointer"
-            title="Open Coach Ayuva: Private & Encrypted AI Nutrition & Workout Coaching"
+            onClick={() => setActiveTab('calculator')}
+            className={`flex-1 py-1.5 px-2 rounded-lg text-[11px] font-semibold text-center transition-all ${
+              activeTab === 'calculator'
+                ? 'bg-cyan-900/60 text-cyan-300 border border-cyan-500/30'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
           >
-            <Bot className="w-4 h-4 text-black" />
-            <span className="tracking-wide">COACH AYUVA</span>
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse hidden sm:inline-block" />
+            Calculator
+          </button>
+          <button
+            onClick={() => setActiveTab('workouts')}
+            className={`flex-1 py-1.5 px-2 rounded-lg text-[11px] font-semibold text-center transition-all ${
+              activeTab === 'workouts'
+                ? 'bg-cyan-900/60 text-cyan-300 border border-cyan-500/30'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            Workouts
+          </button>
+          <button
+            onClick={() => setActiveTab('diet')}
+            className={`flex-1 py-1.5 px-2 rounded-lg text-[11px] font-semibold text-center transition-all ${
+              activeTab === 'diet'
+                ? 'bg-cyan-900/60 text-cyan-300 border border-cyan-500/30'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            Diet Plan
           </button>
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* TAB 1: CALCULATOR & 3D BIO-SCAN LAYER */}
+      {/* 2. Main Content */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-10">
         {activeTab === 'calculator' && (
-          <div className="space-y-8 animate-in fade-in">
-            {/* Top Grid: Form on Left + 3D Hologram Bio-Scanner on Right */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-              {/* Left Column: Form (7 Cols) */}
-              <div id="bmr-form-container" className="lg:col-span-6 xl:col-span-6 space-y-6">
+          <div className="space-y-12">
+            {/* Top Grid: Bio-Form & 3D Interactive Scanner */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+              {/* Left Column: Biometric Parameters Form */}
+              <div id="bmr-form-container" className="lg:col-span-6 w-full">
                 <BMRCalculatorForm
                   initialProfile={profile}
                   onCalculate={handleCalculate}
+                  onOpenCoach={() => setIsCoachOpen(true)}
                 />
               </div>
 
-              {/* Right Column: 3D Holographic Bio-Digital Scanner (6 Cols) */}
-              <div className="lg:col-span-6 xl:col-span-6 space-y-4">
+              {/* Right Column: 3D Hologram Bio-Scanner */}
+              <div className="lg:col-span-6 w-full">
                 <BodyHologram3D
-                  bmr={results.bmr}
-                  tdee={results.tdee}
-                  targetCalories={results.targetCalories}
-                  goalLabel={results.targetGoalLabel}
+                  profile={profile}
                   selectedMuscle={selectedMuscle}
                   onSelectMuscle={handleSelectMuscle}
-                  hasCalculated={hasCalculated}
                 />
-
-                <div className="p-3.5 rounded-xl bg-slate-950/70 border border-cyan-900/40 text-xs text-slate-400 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-cyan-400 shrink-0" />
-                    <span>Click any muscle group on the 3D figure to filter targeted gym exercises.</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('workouts')}
-                    className="text-cyan-400 font-mono font-bold hover:text-cyan-300 ml-2 whitespace-nowrap"
-                  >
-                    View All Gym Exercises →
-                  </button>
-                </div>
               </div>
             </div>
 
-            {/* Results Flow: ONLY displayed after pressing 'CALCULATE BMR & TDEE CALORIES' */}
-            {!hasCalculated ? (
-              <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-br from-[#061126]/90 via-[#07142d]/80 to-[#030917]/95 border border-cyan-500/30 text-center space-y-5 shadow-2xl relative overflow-hidden animate-in fade-in">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(6,182,212,0.09),transparent_70%)] pointer-events-none" />
-                
-                <div className="w-16 h-16 rounded-2xl bg-cyan-950/90 border border-cyan-500/50 text-cyan-400 mx-auto flex items-center justify-center shadow-lg shadow-cyan-500/20">
-                  <Flame className="w-8 h-8 animate-pulse text-cyan-400" />
-                </div>
-
-                <div className="space-y-2 max-w-xl mx-auto">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-mono tracking-wider">
-                    <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>AWAITING INPUT • CALCULATION ENGINE ARMED</span>
-                  </div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-white font-display">
-                    Press &quot;CALCULATE BMR & TDEE CALORIES&quot; Above
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                    Once you click calculate, the complete metabolic architecture will unlock below — including your Basal Metabolic Rate, Maintenance TDEE, Deficit &amp; Surplus Tiers, Macronutrient splits, and personalized training schedule.
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap items-center justify-center gap-2 pt-2 text-xs font-mono text-slate-400">
-                  <span className="px-3 py-1 rounded-lg bg-slate-900/90 border border-slate-800 text-cyan-300">⚡ Clinical BMR &amp; TDEE</span>
-                  <span className="px-3 py-1 rounded-lg bg-slate-900/90 border border-slate-800 text-cyan-300">🎯 Fat Loss &amp; Bulking Tiers</span>
-                  <span className="px-3 py-1 rounded-lg bg-slate-900/90 border border-slate-800 text-cyan-300">🥗 Macro Blueprint</span>
-                  <span className="px-3 py-1 rounded-lg bg-slate-900/90 border border-slate-800 text-cyan-300">🏋️ 3D Workout Integration</span>
-                </div>
-              </div>
-            ) : (
+            {/* Results Dashboard */}
+            <div id="results-dashboard">
               <ResultsDashboard
                 results={results}
                 profile={profile}
@@ -303,87 +243,105 @@ export default function App() {
                 onOpenCoach={() => setIsCoachOpen(true)}
                 onScrollToForm={handleScrollToForm}
               />
-            )}
+            </div>
           </div>
         )}
 
-        {/* TAB 2: GYM WORKOUTS & TRAINING */}
         {activeTab === 'workouts' && (
-          <div className="animate-in fade-in">
+          <div id="gym-workouts-section">
             <GymWorkoutsSection
               selectedMuscle={selectedMuscle}
-              onClearMuscleFilter={() => setSelectedMuscle(null)}
+              onSelectMuscle={setSelectedMuscle}
+              profile={profile}
+              results={results}
+              onOpenCoach={() => setIsCoachOpen(true)}
             />
           </div>
         )}
 
-        {/* TAB 3: DIET BLUEPRINT & NUTRITION */}
         {activeTab === 'diet' && (
-          <div className="animate-in fade-in">
+          <div id="diet-blueprint-section">
             <DietGuideSection
               results={results}
               profile={profile}
-              currentGoal={
-                profile.goal.startsWith('deficit') 
-                  ? 'deficit' 
-                  : profile.goal.startsWith('surplus') 
-                  ? 'surplus' 
-                  : 'maintenance'
-              }
-              onGoalChange={handleGoalChange}
-              onNavigateToCalculator={() => setActiveTab('calculator')}
+              onOpenCoach={() => setIsCoachOpen(true)}
             />
           </div>
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-cyan-950/80 bg-[#02050c] py-6 text-center text-xs text-slate-400 font-mono">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <img 
-              src="/ayuva_logo.jpg" 
-              alt="Ayuva Logo" 
-              className="w-5 h-5 rounded object-contain border border-cyan-500/30"
-              referrerPolicy="no-referrer"
-            />
-            <span>© {new Date().getFullYear()} Ayuva Health Assistant • All Rights Reserved. Clinical Precision Metabolic Engine.</span>
+      {/* 3. Footer */}
+      <footer className="border-t border-slate-800/80 bg-[#020612] py-8 text-xs text-slate-500 mt-12 pb-24 sm:pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <AyuvaLogo size="sm" />
+            <div>
+              <p className="text-slate-300 font-bold font-display text-sm">Ayuva Health Systems</p>
+              <p className="text-[11px] text-slate-500">Mifflin-St Jeor Engine &amp; Indian Macro Calibration Protocol</p>
+            </div>
           </div>
-          <div className="flex flex-wrap items-center gap-3 text-cyan-400/80">
-            <span>3D Biometric Overlay • Coach Ayuva Sports Nutrition • Safe Caloric Science</span>
-            <span className="hidden md:inline text-slate-700">|</span>
-            <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-300 transition-colors underline decoration-cyan-500/40">Sitemap</a>
-            <a href="/seo.json" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-300 transition-colors underline decoration-cyan-500/40">SEO Registry</a>
+          <div className="text-center sm:text-right text-[11px] text-slate-400">
+            <p>Formulated for clinical accuracy &amp; sports bioenergetics.</p>
+            <p className="text-cyan-400 font-mono mt-0.5">© 2026 Ayuva AI Health Assistant. All rights reserved.</p>
           </div>
         </div>
       </footer>
 
-      {/* AI Fitness Coach Interactive Consultation Modal */}
+      {/* 4. Mobile Fixed Bottom Quick Navigation */}
+      <nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#04091a]/95 backdrop-blur-xl border-t border-cyan-500/30 px-3 py-2 flex items-center justify-around shadow-2xl safe-area-pb">
+        <button
+          onClick={() => {
+            setActiveTab('calculator');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition-colors ${
+            activeTab === 'calculator' ? 'text-cyan-400 font-bold' : 'text-slate-400'
+          }`}
+        >
+          <Calculator className="w-5 h-5" />
+          <span className="text-[10px] font-mono">Calculator</span>
+        </button>
+        <button
+          onClick={() => {
+            setActiveTab('workouts');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition-colors ${
+            activeTab === 'workouts' ? 'text-cyan-400 font-bold' : 'text-slate-400'
+          }`}
+        >
+          <Dumbbell className="w-5 h-5" />
+          <span className="text-[10px] font-mono">Workouts</span>
+        </button>
+        <button
+          onClick={() => {
+            setActiveTab('diet');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg transition-colors ${
+            activeTab === 'diet' ? 'text-cyan-400 font-bold' : 'text-slate-400'
+          }`}
+        >
+          <Utensils className="w-5 h-5" />
+          <span className="text-[10px] font-mono">Diet Plan</span>
+        </button>
+        <button
+          onClick={() => setIsCoachOpen(true)}
+          className="flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-cyan-400 bg-cyan-950/60 border border-cyan-500/40 shadow-sm shadow-cyan-500/30"
+        >
+          <Bot className="w-4 h-4 animate-pulse" />
+          <span className="text-[10px] font-mono font-bold">AI Coach</span>
+        </button>
+      </nav>
+
+      {/* 5. AI Coach Modal */}
       <AICoachModal
         isOpen={isCoachOpen}
         onClose={() => setIsCoachOpen(false)}
         profile={profile}
         results={results}
+        selectedMuscle={selectedMuscle}
       />
-      {/* Mobile Fixed Bottom Quick Navigation Bar */}
-<nav className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#04091a]/95 backdrop-blur-xl border-t border-cyan-500/30 px-3 py-2 flex items-center justify-around shadow-2xl safe-area-pb">
-  <button onClick={() => { setActiveTab('calculator'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="...">
-    <Calculator className="w-5 h-5" />
-    <span className="text-[10px] font-mono">Calculator</span>
-  </button>
-  <button onClick={() => { setActiveTab('workouts'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="...">
-    <Dumbbell className="w-5 h-5" />
-    <span className="text-[10px] font-mono">Workouts</span>
-  </button>
-  <button onClick={() => { setActiveTab('diet'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="...">
-    <Utensils className="w-5 h-5" />
-    <span className="text-[10px] font-mono">Diet Plan</span>
-  </button>
-  <button onClick={() => setIsCoachOpen(true)} className="...">
-    <Bot className="w-4 h-4" />
-    <span className="text-[10px] font-mono font-bold">AI Coach</span>
-  </button>
-</nav>
     </div>
   );
 }
